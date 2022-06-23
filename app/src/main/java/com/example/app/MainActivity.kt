@@ -56,18 +56,6 @@ class MainActivity : AppCompatActivity() {
 
         bottomNavigationView.setupWithNavController(navController)
     }
-//        val g = GPSLocation(applicationContext)
-//
-//        val l: Location = g.location!!
-//
-//        if (l != null) {
-//            val lat = l.latitude
-//
-//            val lon = l.longitude
-//
-//            Toast.makeText(applicationContext, "latitude: $lat\nlongitude: $lon", Toast.LENGTH_LONG)
-//                .show()
-
 
 //            locationManager = getSystemService(LOCATION_SERVICE) as LocationManager?
 //
@@ -77,69 +65,6 @@ class MainActivity : AppCompatActivity() {
 //            0f,
 //            locationListener
 //        )
-//            val cities = listOf(
-//                "Tbilisi",
-//                "Batumi",
-//                "Kutaisi",
-//                "Rustavi",
-//                "London",
-//                "Hawaii",
-////            "Gori",
-////            "Zugdidi",
-////            "Poti",
-////            "Kobuleti",
-////            "Khasuri",
-////            "Samtredia"
-//            )
-
-//            recyclerView = findViewById(R.id.recyclerView)
-
-//            val weatherListData = mutableListOf<WeatherData>()
-//
-//            RestClient.initClient()
-//            for (city in cities) {
-//                RestClient.openWeatherMapService.getWeather(
-//                    q = city,
-//                    units = "metric",
-//                    appid = API_KEY
-//                ).enqueue(object : Callback<WeatherData> {
-//                    override fun onResponse(
-//                        call: Call<WeatherData>, response: Response<WeatherData>
-//                    ) {
-//                        if (response.isSuccessful) {
-//                            weatherListData.add(response.body()!!)
-//                            showData(weatherListData)
-//                            Log.d("Successful: $city", response.body().toString())
-//                        }
-//                    }
-//
-//                    override fun onFailure(call: Call<WeatherData>, t: Throwable) {
-//                        Log.d("Failure", t.message.toString())
-//                    }
-//                })
-//            }
-
-
-//        val oneCall: OneCall? = RestClient.openWeatherMapService.getOneCall(
-//            lat = 33.44,
-//            lon = -94.04,
-//            exclude = "minutely,daily",
-//            units = "metric",
-//            appid = API_KEY
-//        ).execute().body()
-//
-//        Log.d("Onecall", oneCall.toString())
-
-
-//        }
-//    }
-
-//    private fun showData(weatherListData: MutableList<WeatherData>) {
-//        recyclerView.apply {
-//            layoutManager = LinearLayoutManager(this@MainActivity)
-//            adapter = WeatherRecyclerAdapter(weatherListData)
-//        }
-//    }
 
 //    private val locationListener: LocationListener = object : LocationListener {
 //        @SuppressLint("ShowToast")

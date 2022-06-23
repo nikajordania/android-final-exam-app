@@ -7,17 +7,13 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.app.R
 import com.example.app.adapters.ForecastRecyclerAdapter
-import com.example.app.adapters.WeatherRecyclerAdapter
 import com.example.app.api.RestClient
-import com.example.app.api.dto.onecall.Hourly
 import com.example.app.api.dto.onecall.OneCall
-import com.example.app.api.dto.weatherdata.WeatherData
 import com.example.app.constants.Constants
 import com.example.app.receivers.GPSLocation
 import com.squareup.picasso.Picasso
@@ -28,11 +24,12 @@ import java.lang.Exception
 
 class ForecastFragment : Fragment(R.layout.fragment_forecast) {
     lateinit var recyclerView: RecyclerView
-    lateinit var coordinates : List<Double>
     lateinit var imageView: ImageView
     lateinit var cityText: TextView
     lateinit var weatherText: TextView
     lateinit var humidityText: TextView
+    var lat = 0.0
+    var lon = 0.0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -43,18 +40,20 @@ class ForecastFragment : Fragment(R.layout.fragment_forecast) {
         humidityText = view.findViewById(R.id.humidity)
 
         recyclerView = view.findViewById(R.id.recyclerView)
-        coordinates = getLocation()
 
-        getData(coordinates[1], coordinates[0])
+        getLocation()
+        getData(lat, lon)
     }
 
-    fun getLocation() : List<Double>{
+    fun getLocation(){
         val gps = GPSLocation(requireContext())
 
-        val loc: Location = gps.location!!
+        val loc: Location? = gps.location
 
-        if(loc != null) return listOf(loc.longitude, loc.latitude)
-        else throw Exception("Error fetching location.")
+        if(loc != null){
+            lat = loc.latitude
+            lon = loc.longitude
+        }
     }
 
     fun getData(lat: Double, lon: Double){
