@@ -28,7 +28,6 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
-//    private lateinit var recyclerView: RecyclerView
 //    private var locationManager: LocationManager? = null
     lateinit var bottomNavigationView: BottomNavigationView
     lateinit var navController: NavController
@@ -124,7 +123,7 @@ class MainActivity : AppCompatActivity() {
 //        val oneCall: OneCall? = RestClient.openWeatherMapService.getOneCall(
 //            lat = 33.44,
 //            lon = -94.04,
-//            exclude = "hourly,daily",
+//            exclude = "minutely,daily",
 //            units = "metric",
 //            appid = API_KEY
 //        ).execute().body()

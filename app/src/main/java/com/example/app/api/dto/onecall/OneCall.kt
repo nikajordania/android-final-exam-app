@@ -10,8 +10,8 @@ data class OneCall(
     val lat: Double,
     @SerializedName("lon")
     val lon: Double,
-    @SerializedName("minutely")
-    val minutely: List<Minutely>,
+    @SerializedName("hourly")
+    val hourly: List<Hourly>,
     @SerializedName("timezone")
     val timezone: String,
     @SerializedName("timezone_offset")
