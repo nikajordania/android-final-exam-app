@@ -1,12 +1,16 @@
 package com.example.app.fragments
 
+import android.Manifest
 import android.annotation.SuppressLint
-import android.location.Location
+import android.content.pm.PackageManager
+import android.location.LocationRequest
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,12 +19,13 @@ import com.example.app.adapters.ForecastRecyclerAdapter
 import com.example.app.api.RestClient
 import com.example.app.api.dto.onecall.OneCall
 import com.example.app.constants.Constants
-import com.example.app.receivers.GPSLocation
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.squareup.picasso.Picasso
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.lang.Exception
+
 
 class ForecastFragment : Fragment(R.layout.fragment_forecast) {
     lateinit var recyclerView: RecyclerView
@@ -28,9 +33,11 @@ class ForecastFragment : Fragment(R.layout.fragment_forecast) {
     lateinit var cityText: TextView
     lateinit var weatherText: TextView
     lateinit var humidityText: TextView
-    var lat = 0.0
-    var lon = 0.0
+    var lat : Double? = null
+    var lon : Double? = null
+    lateinit var fusedLocationClient: FusedLocationProviderClient
 
+    @RequiresApi(Build.VERSION_CODES.S)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -42,17 +49,34 @@ class ForecastFragment : Fragment(R.layout.fragment_forecast) {
         recyclerView = view.findViewById(R.id.recyclerView)
 
         getLocation()
-        getData(lat, lon)
+
+        if(lat != null && lon != null){
+            getData(lat!!, lon!!)
+        }
     }
 
     fun getLocation(){
-        val gps = GPSLocation(requireContext())
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
-        val loc: Location? = gps.location
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 2)
+            return
+        }
 
-        if(loc != null){
-            lat = loc.latitude
-            lon = loc.longitude
+        val location = fusedLocationClient.getCurrentLocation(LocationRequest.QUALITY_BALANCED_POWER_ACCURACY, null)
+
+        location.addOnCompleteListener { location ->
+            lat = location.result.latitude
+            lon = location.result.longitude
+
+            getData(lat!!, lon!!)
         }
     }
 
