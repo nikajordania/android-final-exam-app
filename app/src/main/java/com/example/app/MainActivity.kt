@@ -1,62 +1,102 @@
 package com.example.app
 
-import androidx.appcompat.app.AppCompatActivity
+import android.Manifest
+import android.annotation.SuppressLint
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.app.adapters.WeatherRecyclerAdapter
 import com.example.app.api.RestClient
-import com.example.app.api.dto.onecall.OneCall
 import com.example.app.api.dto.weatherdata.WeatherData
+import com.example.app.constants.Constants.API_KEY
+import com.example.app.receivers.GPSLocation
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
+    private var locationManager: LocationManager? = null
+
+    @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val cities = listOf(
-            "Tbilisi",
-            "Batumi",
-            "Kutaisi",
-            "Rustavi",
-            "London",
-            "Hawaii",
+        ActivityCompat.requestPermissions(
+            this@MainActivity,
+            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+            123
+        )
+
+        val g = GPSLocation(applicationContext)
+
+        val l: Location = g.location!!
+
+        if (l != null) {
+            val lat = l.latitude
+
+            val lon = l.longitude
+
+            Toast.makeText(applicationContext, "latitude: $lat\nlongitude: $lon", Toast.LENGTH_LONG)
+                .show()
+
+
+//            locationManager = getSystemService(LOCATION_SERVICE) as LocationManager?
+//
+//        locationManager?.requestLocationUpdates(
+//            LocationManager.NETWORK_PROVIDER,
+//            0L,
+//            0f,
+//            locationListener
+//        )
+            val cities = listOf(
+                "Tbilisi",
+                "Batumi",
+                "Kutaisi",
+                "Rustavi",
+                "London",
+                "Hawaii",
 //            "Gori",
 //            "Zugdidi",
 //            "Poti",
 //            "Kobuleti",
 //            "Khasuri",
 //            "Samtredia"
-        )
+            )
 
-        recyclerView = findViewById(R.id.recyclerView)
+            recyclerView = findViewById(R.id.recyclerView)
 
-        val x = mutableListOf<WeatherData>()
+            val weatherListData = mutableListOf<WeatherData>()
 
-        RestClient.initClient()
-        for (city in cities) {
-            RestClient.openWeatherMapService.getWeather(
-                q = city,
-                units = "metric",
-                appid = "03006558897f1413ecaaf87f7cadec03"
-            ).enqueue(object : Callback<WeatherData> {
-                override fun onResponse(
-                    call: Call<WeatherData>, response: Response<WeatherData>
-                ) {
-                    if (response.isSuccessful) {
-                        response.body()?.let { x.add(it) }
-                        Log.d("Successful: " + city, response.body().toString())
+            RestClient.initClient()
+            for (city in cities) {
+                RestClient.openWeatherMapService.getWeather(
+                    q = city,
+                    units = "metric",
+                    appid = API_KEY
+                ).enqueue(object : Callback<WeatherData> {
+                    override fun onResponse(
+                        call: Call<WeatherData>, response: Response<WeatherData>
+                    ) {
+                        if (response.isSuccessful) {
+                            weatherListData.add(response.body()!!)
+                            showData(weatherListData)
+                            Log.d("Successful: $city", response.body().toString())
+                        }
                     }
-                }
 
-                override fun onFailure(call: Call<WeatherData>, t: Throwable) {
-                    Log.d("Failure", t.message.toString())
-                }
-            })
-        }
+                    override fun onFailure(call: Call<WeatherData>, t: Throwable) {
+                        Log.d("Failure", t.message.toString())
+                    }
+                })
+            }
 
 
 //        val oneCall: OneCall? = RestClient.openWeatherMapService.getOneCall(
@@ -64,14 +104,31 @@ class MainActivity : AppCompatActivity() {
 //            lon = -94.04,
 //            exclude = "hourly,daily",
 //            units = "metric",
-//            appid = "03006558897f1413ecaaf87f7cadec03"
+//            appid = API_KEY
 //        ).execute().body()
 //
 //        Log.d("Onecall", oneCall.toString())
 
-        recyclerView.apply {
-            layoutManager = LinearLayoutManager(this@MainActivity)
-            adapter = WeatherRecyclerAdapter(x)
+
         }
     }
+
+    private fun showData(weatherListData: MutableList<WeatherData>) {
+        recyclerView.apply {
+            layoutManager = LinearLayoutManager(this@MainActivity)
+            adapter = WeatherRecyclerAdapter(weatherListData)
+        }
+    }
+
+//    private val locationListener: LocationListener = object : LocationListener {
+//        @SuppressLint("ShowToast")
+//        override fun onLocationChanged(location: Location) {
+//            Toast.makeText(
+//                applicationContext,
+//                "lon: ${location.longitude}, lat: ${location.latitude}",
+//                Toast.LENGTH_SHORT
+//            )
+//        }
+//
+//    }
 }

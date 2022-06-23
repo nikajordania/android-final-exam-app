@@ -1,4 +1,4 @@
-package com.example.app
+package com.example.app.adapters
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.app.R
 import com.example.app.api.dto.weatherdata.WeatherData
 import com.squareup.picasso.Picasso
 
