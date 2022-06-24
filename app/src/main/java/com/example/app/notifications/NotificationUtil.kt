@@ -10,6 +10,7 @@ import com.example.app.R
 object WeatherAppNotificationUtil {
     private const val CHANNEL_ID = "WEATHERAPPNOTIFICATIONCHANNEL"
     private lateinit var manager: NotificationManager
+
     fun showAirplaneModeNotification(context: Context, status: Boolean) {
         if (status) {
             val notification = NotificationCompat.Builder(context, CHANNEL_ID)
@@ -39,6 +40,35 @@ object WeatherAppNotificationUtil {
             }
         } else {
             manager.cancel(1)
+        }
+    }
+
+    fun showRepeatNotification(context: Context, temp: String) {
+
+        val notification = NotificationCompat.Builder(context, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_baseline_airplanemode_active_24)
+            .setContentTitle("Weather App: Current Weather")
+            .setContentText("Current Weather: $temp℃")
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = CHANNEL_ID
+            val descriptionText = "WeatherApp"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(
+                name,
+                descriptionText,
+                importance
+            ).apply {
+                description = descriptionText
+            }
+
+            manager =
+                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            manager.createNotificationChannel(channel)
+            manager.notify(2, notification.build())
+
         }
     }
 }
