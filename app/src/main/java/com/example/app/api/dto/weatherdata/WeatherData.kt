@@ -5,29 +5,29 @@ import com.google.gson.annotations.SerializedName
 
 data class WeatherData(
     @SerializedName("base")
-    val base: String,
+    val base: String?,
     @SerializedName("clouds")
-    val clouds: Clouds,
+    val clouds: Clouds?,
     @SerializedName("cod")
-    val cod: Int,
+    val cod: Int?,
     @SerializedName("coord")
-    val coord: Coord,
+    val coord: Coord?,
     @SerializedName("dt")
     val dt: Int,
     @SerializedName("id")
-    val id: Int,
+    val id: Int?,
     @SerializedName("main")
     val main: Main,
     @SerializedName("name")
     val name: String,
     @SerializedName("sys")
-    val sys: Sys,
+    val sys: Sys?,
     @SerializedName("timezone")
     val timezone: Int,
     @SerializedName("visibility")
-    val visibility: Int,
+    val visibility: Int?,
     @SerializedName("weather")
-    val weather: List<Weather>,
+    val weather: List<Weather>?,
     @SerializedName("wind")
-    val wind: Wind
+    val wind: Wind?
 )

@@ -7,9 +7,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.room.Room
+import com.example.app.api.RestClient
+import com.example.app.database.App
+import com.example.app.database.AppDatabase
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -27,7 +32,9 @@ class MainActivity : AppCompatActivity() {
         )
 
         bottomNavigationView = findViewById(R.id.bottomNavView)
-        navController = findNavController(R.id.navHostFragment)
+
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
+        navController = navHostFragment.navController
 
         setupActionBarWithNavController(navController, AppBarConfiguration(
             setOf(

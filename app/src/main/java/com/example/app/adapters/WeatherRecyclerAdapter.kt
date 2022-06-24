@@ -39,7 +39,7 @@ class WeatherRecyclerAdapter(private val weatherListData: MutableList<WeatherDat
             calendar.timeInMillis = ((weatherData.dt + weatherData.timezone) * 1000).toLong()
             val hourDay = calendar.get(Calendar.HOUR_OF_DAY)
 
-            Picasso.get().load(getIcon(weatherData.weather[0].icon)).into(weatherIcon)
+            Picasso.get().load(getIcon(weatherData.weather!![0].icon)).into(weatherIcon)
             weatherView.text = weatherData.main.temp.toInt().toString() + "℃"
             city.text = weatherData.name
             humidity.text = weatherData.main.humidity.toString() + "%"
