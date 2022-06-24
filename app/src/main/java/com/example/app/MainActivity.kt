@@ -2,6 +2,8 @@ package com.example.app
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -15,6 +17,7 @@ import androidx.room.Room
 import com.example.app.api.RestClient
 import com.example.app.database.App
 import com.example.app.database.AppDatabase
+import com.example.app.receivers.AirplaneModeReceiver
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -30,6 +33,12 @@ class MainActivity : AppCompatActivity() {
             arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
             123
         )
+
+        val airplaneModeReceiver = AirplaneModeReceiver()
+
+        IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED).also {
+            registerReceiver(airplaneModeReceiver, it)
+        }
 
         bottomNavigationView = findViewById(R.id.bottomNavView)
 
