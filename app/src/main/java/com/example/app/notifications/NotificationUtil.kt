@@ -46,7 +46,7 @@ object WeatherAppNotificationUtil {
     fun showRepeatNotification(context: Context, temp: String) {
 
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_baseline_airplanemode_active_24)
+            .setSmallIcon(R.drawable.ic_baseline_cloud_24)
             .setContentTitle("Weather App: Current Weather")
             .setContentText("Current Weather: $temp℃")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
